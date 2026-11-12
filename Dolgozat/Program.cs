@@ -28,26 +28,25 @@
 
         static void Takarit()
         {
+            string[] seged = new string[10];
+            int j = 0;
+            int db = 0;
             for (int i = 0; i < huto.Length; i++)
             {
-                if (huto[i] == "")
+                if (huto[i] != "")
                 {
-                    for (int j = i; j < huto.Length - 1; j++)
-                    {
-                        huto[j] = huto[j + 1];
-                    }
-                    huto[huto.Length - 1] = "";
+                    seged[j] = huto[i];
+                    j++;
                 }
+                if (huto[i] != null || huto[i] != "")
+                {
+                    db++;
+                }
+
             }
-            //int db = 0;
-            //for (int i = 0; i < huto.Length; i++)
-            //{
-            //    if (huto[i] != null)
-            //    {
-            //        db++;
-            //    }
-            //}
-            //return db;
+            huto = seged;
+            Console.WriteLine($"{db} élelmiszer van a hűtőben.");
+            return;
         }
 
         static void KeresEtel(string etelNeve)
