@@ -76,7 +76,7 @@
 
         static void LeghosszabbNovekvo()
         {
-            int[] szamok = new int[10];
+            
             int maxHossz = 0;
             int jelenlegiHossz = 1;
             int kezdIndex = 0;
@@ -108,8 +108,25 @@
             
             for (int i = kezdIndex; i <= vegIndex; i++)
             {
-
+                
                 Console.Write(szamok[i] + " ");
+            }
+        }
+
+        static void AtlagAlattiDuplazas()
+        {
+           int atlag = 0;
+            for (int i = 0; i < szamok.Length; i++)
+            {
+                atlag += szamok[i];
+            }
+            atlag /= szamok.Length;
+            for (int i = 0; i < szamok.Length; i++)
+            {
+                if (szamok[i] < atlag)
+                {
+                    szamok[i] *= 2;
+                }
             }
         }
 
@@ -171,7 +188,16 @@
 
 
             FeltoltEgyediekkel(1, 100);
+            for (int i = 0; i < szamok.Length; i++)
+            {
+                Console.Write(szamok[i] + " ");
+            }
             LeghosszabbNovekvo();
+            AtlagAlattiDuplazas();
+            for (int i = 0; i < szamok.Length; i++)
+            {
+                Console.Write(szamok[i] + " ");
+            }
         }
     }
 }
