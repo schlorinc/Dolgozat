@@ -4,15 +4,16 @@
     {
         static Random r = new Random();
 
-        static string[] huto = new string[10];
+        static string[] huto = { "alma", "", "körte", "", "", "sajt", "", "tej", "", ""};
 
         static int[] szamok = new int[10];
 
-        static void elhelyezes()
+        static void Elhelyezes()
         {
             bool c = false;
             int i = 0;
-            Console.Write("Mivel szeretné feltölteni a hűtőt: ");
+            int teli = 0;
+            Console.Write("\nMivel szeretné feltölteni a hűtőt: ");
             do
             {
                 if (huto[i] == null || huto[i] == "")
@@ -20,17 +21,21 @@
                     huto[i] = Console.ReadLine();
                     c = true;
                 }
-                else if (i == 10)
+                else
                 {
-                    Console.WriteLine("A hűtő megtelt!");
-                    c = true;
+                    teli ++;
+                    if (teli == 10)
+                    {
+                        Console.WriteLine("\nA hűtő megtelt!");
+                        c = true;
+                    }
                 }
                 i++;
             }
             while (c == false);
         }
 
-        static void Takarit()
+        static int Takarit()
         {
             string[] seged = new string[10];
             int j = 0;
@@ -41,15 +46,11 @@
                 {
                     seged[j] = huto[i];
                     j++;
-                }
-                if (huto[i] != null || huto[i] != "")
-                {
                     db++;
                 }
-
             }
             huto = seged;
-            Console.WriteLine($"{db} élelmiszer van a hűtőben.");
+            return db;
         }
 
         static int KeresEtel(string etelNeve)
@@ -62,21 +63,43 @@
                 }
             }
             return -1;
-
         }
+
+        static void MaganhangzovalKezd()
+        {
+            Console.WriteLine();
+            for (int i = 0; i < huto.Length; i++)
+            {
+                if (huto[i] != null && huto[i] != "")
+                {
+                    char elsoBetu = huto[i][0];
+                    if ("aeiouáéíóöőúüű".Contains(elsoBetu))
+                    {
+                        Console.WriteLine(huto[i]);
+                    }
+                }
+            }
+        }
+
 
         static void FeltoltEgyediekkel(int min, int max)
         {
+            Console.WriteLine("------------------------------------------------------");
             for (int i = 0; i < huto.Length; i++)
             {
-                int szam = r.Next(min, max + 1);
+                int szam;
+                do
+                {
+                    szam = r.Next(min, max + 1);
+                }
+                while (szamok.Contains(szam));
+
                 szamok[i] = szam;
             }
         }
 
         static void LeghosszabbNovekvo()
         {
-            
             int maxHossz = 0;
             int jelenlegiHossz = 1;
             int kezdIndex = 0;
@@ -104,18 +127,19 @@
                 vegIndex = szamok.Length - 1;
                 kezdIndex = vegIndex - maxHossz + 1;
             }
-            Console.WriteLine("A leghosszabb növekvő sorozat hossza: " + maxHossz);
-            
+            Console.WriteLine("\nA leghosszabb növekvő sorozat hossza: " + maxHossz);
+            Console.WriteLine("\nA leghosszabb sorozat elemei:");
+
             for (int i = kezdIndex; i <= vegIndex; i++)
             {
-                
                 Console.Write(szamok[i] + " ");
             }
         }
 
         static void AtlagAlattiDuplazas()
         {
-           int atlag = 0;
+            Console.WriteLine();
+            int atlag = 0;
             for (int i = 0; i < szamok.Length; i++)
             {
                 atlag += szamok[i];
@@ -128,6 +152,11 @@
                     szamok[i] *= 2;
                 }
             }
+
+            for (int i = 0; i < szamok.Length; i++)
+            {
+                Console.Write(szamok[i] + "\n");
+            }
         }
 
         static void Main(string[] args)
@@ -137,11 +166,11 @@
             do
             {
                 Console.WriteLine();
-                Console.Write("Elhelyezés - e\nTakarítás - t\nFeltöltés üres elemekkel - f\nKilépés - k\nKeresés - a\nKérem adja meg, hogy mit szeretne csinálni: ");
+                Console.Write("Elhelyezés - e\nTakarítás - t\nKilépés - k\nKeresés - a\nMagánhangzóval kezdődő élelmiszerek - m\nKérem adja meg, hogy mit szeretne csinálni: ");
                 valasz = Convert.ToChar(Console.ReadLine());
                 if (valasz == 'e')
                 {
-                    elhelyezes();
+                    Elhelyezes();
                     for (int i = 0; i < huto.Length; i++)
                     {
                         Console.WriteLine(huto[i]);
@@ -149,21 +178,8 @@
                 }
                 else if (valasz == 't')
                 {
-                    Takarit();
-                    for (int i = 0; i < huto.Length; i++)
-                    {
-                        Console.WriteLine(huto[i]);
-                    }
-                }
-                else if (valasz == 'f')
-                {
-                    for (int i = 0; i < huto.Length; i++)
-                    {
-                        if (huto[i] == null)
-                        {
-                            huto[i] = "";
-                        }
-                    }
+                    int db = Takarit();
+                    Console.WriteLine($"\nA hűtőben {db} élelmiszer található!");
                     for (int i = 0; i < huto.Length; i++)
                     {
                         Console.WriteLine(huto[i]);
@@ -171,17 +187,21 @@
                 }
                 else if (valasz == 'a')
                 {
-                    Console.Write("Kérem adja meg az étel nevét: ");
+                    Console.Write("\nKérem adja meg az étel nevét: ");
                     string etelNeve = Console.ReadLine();
                     int index = KeresEtel(etelNeve);
                     if (index != -1)
                     {
-                        Console.WriteLine($"Az étel a hűtőben található, indexe: {index}");
+                        Console.WriteLine($"\nAz étel a hűtőben található, indexe: {index+1}");
                     }
                     else
                     {
-                        Console.WriteLine("Az étel nem található a hűtőben.");
+                        Console.WriteLine("\nAz étel nem található a hűtőben.");
                     }
+                }
+                else if (valasz == 'm')
+                {
+                    MaganhangzovalKezd();
                 }
             }
             while (valasz != 'k');
@@ -190,14 +210,11 @@
             FeltoltEgyediekkel(1, 100);
             for (int i = 0; i < szamok.Length; i++)
             {
-                Console.Write(szamok[i] + " ");
+                Console.Write(szamok[i] + "\n");
             }
             LeghosszabbNovekvo();
+            Console.WriteLine();
             AtlagAlattiDuplazas();
-            for (int i = 0; i < szamok.Length; i++)
-            {
-                Console.Write(szamok[i] + " ");
-            }
         }
     }
 }
