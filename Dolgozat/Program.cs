@@ -4,7 +4,7 @@
     {
         static Random r = new Random();
 
-        static string[] huto = { "alma", "", "körte", "", "", "sajt", "", "tej", "", ""};
+        static string[] huto = { "alma", "", "körte", "", "", "sajt", "", "tej", "", "" };
 
         static int[] szamok = new int[10];
 
@@ -23,7 +23,7 @@
                 }
                 else
                 {
-                    teli ++;
+                    teli++;
                     if (teli == 10)
                     {
                         Console.WriteLine("\nA hűtő megtelt!");
@@ -59,10 +59,10 @@
             {
                 if (huto[i] == etelNeve)
                 {
-                    return i;
+                    return i + 1;
                 }
             }
-            return -1;
+            return 0;
         }
 
         static void MaganhangzovalKezd()
@@ -85,7 +85,7 @@
         static void FeltoltEgyediekkel(int min, int max)
         {
             Console.WriteLine("------------------------------------------------------");
-            for (int i = 0; i < huto.Length; i++)
+            for (int i = 0; i < szamok.Length; i++)
             {
                 int szam;
                 do
@@ -98,12 +98,13 @@
             }
         }
 
-        static void LeghosszabbNovekvo()
+        static int[] LeghosszabbNovekvo()
         {
-            int maxHossz = 0;
+            int maxHossz = 1;
             int jelenlegiHossz = 1;
             int kezdIndex = 0;
-            int vegIndex = 0;
+            int maxKezdIndex = 0;
+
             for (int i = 1; i < szamok.Length; i++)
             {
                 if (szamok[i] > szamok[i - 1])
@@ -112,34 +113,31 @@
                 }
                 else
                 {
-                    if (jelenlegiHossz > maxHossz)
-                    {
-                        maxHossz = jelenlegiHossz;
-                        vegIndex = i - 1;
-                        kezdIndex = vegIndex - maxHossz + 1;
-                    }
                     jelenlegiHossz = 1;
+                    kezdIndex = i;
+                }
+
+                if (jelenlegiHossz > maxHossz)
+                {
+                    maxHossz = jelenlegiHossz;
+                    maxKezdIndex = kezdIndex;
                 }
             }
-            if (jelenlegiHossz > maxHossz)
-            {
-                maxHossz = jelenlegiHossz;
-                vegIndex = szamok.Length - 1;
-                kezdIndex = vegIndex - maxHossz + 1;
-            }
-            Console.WriteLine("\nA leghosszabb növekvő sorozat hossza: " + maxHossz);
-            Console.WriteLine("\nA leghosszabb sorozat elemei:");
 
-            for (int i = kezdIndex; i <= vegIndex; i++)
+            int[] eredmeny = new int[maxHossz];
+
+            for (int i = 0; i < maxHossz; i++)
             {
-                Console.Write(szamok[i] + " ");
+                eredmeny[i] = szamok[maxKezdIndex + i];
             }
+
+            return eredmeny;
         }
 
         static void AtlagAlattiDuplazas()
         {
             Console.WriteLine();
-            int atlag = 0;
+            double atlag = 0;
             for (int i = 0; i < szamok.Length; i++)
             {
                 atlag += szamok[i];
@@ -190,9 +188,9 @@
                     Console.Write("\nKérem adja meg az étel nevét: ");
                     string etelNeve = Console.ReadLine();
                     int index = KeresEtel(etelNeve);
-                    if (index != -1)
+                    if (index != 0)
                     {
-                        Console.WriteLine($"\nAz étel a hűtőben található, indexe: {index+1}");
+                        Console.WriteLine($"Az étel a hűtőben található, indexe: {index}");
                     }
                     else
                     {
@@ -212,7 +210,15 @@
             {
                 Console.Write(szamok[i] + "\n");
             }
-            LeghosszabbNovekvo();
+            int[] novekvo = LeghosszabbNovekvo();
+
+            Console.WriteLine();
+            Console.WriteLine("Leghosszabb növekvő sorozat:");
+
+            for (int i = 0; i < novekvo.Length; i++)
+            {
+                Console.Write(novekvo[i] + " ");
+            }
             Console.WriteLine();
             AtlagAlattiDuplazas();
         }
